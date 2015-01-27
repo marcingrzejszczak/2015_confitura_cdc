@@ -1,0 +1,5 @@
+include ':stubs'
+include ':fraudDetectionService'
+include ':loanApplicationService'
+
+rootProject.name = 'geecon_tdd_cdc_examples-root'
