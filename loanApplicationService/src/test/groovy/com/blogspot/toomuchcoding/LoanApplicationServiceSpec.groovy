@@ -35,4 +35,16 @@ class LoanApplicationServiceSpec extends Specification {
 			loanApplication.rejectionReason == null
 	}
 
+	def 'should be rejected due to abnormal loan amount'() {
+		given:
+			LoanApplication application =
+					new LoanApplication(client: new Client(pesel: '1234567890'), amount: 99_999)
+		when:
+			LoanApplicationResult loanApplication = sut.loanApplication(application)
+		then:
+			loanApplication.loanApplicationStatus == LoanApplicationStatus.LOAN_APPLICATION_REJECTED
+			loanApplication.rejectionReason == 'Amount too high'
+	}
+
+
 }
