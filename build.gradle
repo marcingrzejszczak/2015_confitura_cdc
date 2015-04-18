@@ -5,35 +5,15 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE")
-		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.3.0'
+		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.5.0'
 	}
 }
 
 ext {
 	spockVersion = '0.7-groovy-2.0'
 	restAssuredVersion = '2.4.0'
+
 	accurestStubsBaseDirectory = 'src/test/resources/stubs'
-}
-
-configure(project(':fraudDetectionService')) {
-	task copyStubs(type: Copy) {
-		from("${project(':stubs').projectDir.absolutePath}/mappings/fraudDetectionService")
-		into "${accurestStubsBaseDirectory}/fraud"
-	}
-}
-
-configure(project(':loanApplicationService')) {
-	task copyStubs(type: Copy) {
-		from("${project(':stubs').projectDir.absolutePath}/mappings/loanApplicationService")
-		into "${accurestStubsBaseDirectory}/loan"
-	}
-	task copyCollaboratorStubs(type: Copy) {
-		from("${project(':stubs').projectDir.absolutePath}/mappings/fraudDetectionService")
-		into "src/test/resources/mappings"
-	}
-
-	copyStubs.dependsOn('copyCollaboratorStubs')
-
 }
 
 subprojects {
@@ -59,11 +39,18 @@ configure([project(':fraudDetectionService'), project(':loanApplicationService')
 	apply plugin: 'spring-boot'
 	apply plugin: 'accurest'
 
+	ext {
+		wiremockStubsOutputDirRoot = file("${project.buildDir}/production/${project.name}-stubs/")
+		wiremockStubsOutputDir = new File(wiremockStubsOutputDirRoot, 'mappings/')
+	}
+
 	accurest {
 		targetFramework = 'Spock'
 		testMode = 'MockMvc'
 		baseClassForTests = 'com.blogspot.toomuchcoding.MvcSpec'
-		stubsBaseDirectory = accurestStubsBaseDirectory
+		contractsDslDir = file("${project.projectDir.absolutePath}/mappings/")
+		generatedTestSourcesDir = file("${project.buildDir}/generated-sources/")
+		stubsOutputDir = wiremockStubsOutputDir
 	}
 
 	generateAccurest.dependsOn('copyStubs')
@@ -91,4 +78,27 @@ configure([project(':fraudDetectionService'), project(':loanApplicationService')
 
 	clean.dependsOn('cleanup')
 
+}
+
+
+configure(project(':fraudDetectionService')) {
+	task copyStubs(type: Copy) {
+		from(new File(wiremockStubsOutputDir, "/fraudDetectionService"))
+		into "${accurestStubsBaseDirectory}/fraud"
+	}
+}
+
+configure(project(':loanApplicationService')) {
+
+	task copyStubs(type: Copy) {
+		from(new File(wiremockStubsOutputDir, "/loanApplicationService"))
+		into "${accurestStubsBaseDirectory}/loan"
+	}
+	task copyCollaboratorStubs(type: Copy) {
+		File fraudBuildDir = project(':fraudDetectionService').buildDir
+		from(new File(fraudBuildDir, '/production/fraud-detection-service-stubs/'), "/fraudDetectionService")
+		into "src/test/resources/mappings"
+	}
+
+	copyStubs.dependsOn('copyCollaboratorStubs')
 }
