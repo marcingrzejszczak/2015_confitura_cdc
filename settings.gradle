@@ -1,3 +1,2 @@
-include ':stubs'
 include ':fraudDetectionService'
 include ':loanApplicationService'
