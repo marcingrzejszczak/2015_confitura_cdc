@@ -5,7 +5,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE")
-		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.5.0'
+		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.6.2'
 	}
 }
 
@@ -53,8 +53,6 @@ configure([project(':fraudDetectionService'), project(':loanApplicationService')
 		stubsOutputDir = wiremockStubsOutputDir
 	}
 
-	generateAccurest.dependsOn('copyStubs')
-
 	jar {
 		version = '0.0.1'
 	}
@@ -80,25 +78,17 @@ configure([project(':fraudDetectionService'), project(':loanApplicationService')
 
 }
 
-
 configure(project(':fraudDetectionService')) {
-	task copyStubs(type: Copy) {
-		from(new File(wiremockStubsOutputDir, "/fraudDetectionService"))
-		into "${accurestStubsBaseDirectory}/fraud"
-	}
+	test.dependsOn('generateWiremockClientStubs')
 }
 
 configure(project(':loanApplicationService')) {
 
-	task copyStubs(type: Copy) {
-		from(new File(wiremockStubsOutputDir, "/loanApplicationService"))
-		into "${accurestStubsBaseDirectory}/loan"
-	}
 	task copyCollaboratorStubs(type: Copy) {
 		File fraudBuildDir = project(':fraudDetectionService').buildDir
-		from(new File(fraudBuildDir, '/production/fraud-detection-service-stubs/'), "/fraudDetectionService")
-		into "src/test/resources/mappings"
+		from(new File(fraudBuildDir, "/production/${project(':fraudDetectionService').name}-stubs/"))
+		into "src/test/resources/"
 	}
 
-	copyStubs.dependsOn('copyCollaboratorStubs')
+	generateAccurest.dependsOn('copyCollaboratorStubs')
 }
