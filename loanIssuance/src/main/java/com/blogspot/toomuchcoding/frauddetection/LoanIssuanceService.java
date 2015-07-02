@@ -52,8 +52,6 @@ public class LoanIssuanceService {
 		LoanApplicationStatus applicationStatus = null;
 		if (FraudCheckStatus.OK == response.getFraudCheckStatus()) {
 			applicationStatus = LoanApplicationStatus.LOAN_APPLIED;
-		} else if (FraudCheckStatus.FRAUD == response.getFraudCheckStatus()) {
-			applicationStatus = LoanApplicationStatus.LOAN_APPLICATION_REJECTED;
 		}
 
 		return new LoanApplicationResult(applicationStatus, response.getRejectionReason());
