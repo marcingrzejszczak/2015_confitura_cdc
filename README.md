@@ -1,6 +1,9 @@
+[![Build Status](https://travis-ci.org/marcingrzejszczak/2015_confitura_cdc.svg?branch=master)](https://travis-ci.org/marcingrzejszczak/2015_confitura_cdc)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/marcingrzejszczak/2015_confitura_cdc?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 # cdc_examples
 
-## 
+## Introduction
 
 In this repository you'll find examples of CDC using [Accurest](https://github.com/Codearte/accurest) 
 from [Codearte](https://github.com/Codearte) and [4financeIT](https://github.com/4finance).
