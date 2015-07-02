@@ -1,2 +1,2 @@
-include ':fraudDetectionService'
-include ':loanApplicationService'
+include ':fraudDetectionServer'
+include ':loanIssuance'

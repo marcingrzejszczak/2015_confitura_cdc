@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class LoanApplicationService {
+public class LoanIssuanceService {
 
-	private static final String FRAUD_SERVICE_JSON_VERSION_1 =
+	private static final String FRAUD_SERVER_JSON_VERSION_1 =
 			"application/vnd.fraud.v1+json";
 
 	private final RestTemplate restTemplate;
 
-	public LoanApplicationService() {
+	public LoanIssuanceService() {
 		this.restTemplate = new RestTemplate();
 	}
 
@@ -38,7 +38,7 @@ public class LoanApplicationService {
 	private FraudServiceResponse sendRequestToFraudDetectionService(
 			FraudServiceRequest request) {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add(HttpHeaders.CONTENT_TYPE, FRAUD_SERVICE_JSON_VERSION_1);
+		httpHeaders.add(HttpHeaders.CONTENT_TYPE, FRAUD_SERVER_JSON_VERSION_1);
 
 		ResponseEntity<FraudServiceResponse> response =
 				restTemplate.exchange("http://localhost:8080/fraudcheck", HttpMethod.PUT,

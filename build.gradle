@@ -4,8 +4,8 @@ buildscript {
 		mavenLocal()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
-		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.6.2'
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
+		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.7.0'
 	}
 }
 
@@ -29,13 +29,13 @@ subprojects {
 		testCompile "org.codehaus.groovy:groovy-all:2.4.3"
 		testCompile "org.spockframework:spock-core:$spockVersion"
 		testCompile("junit:junit:4.12")
-		testCompile('com.github.tomakehurst:wiremock:1.52') {
+		testCompile('com.github.tomakehurst:wiremock:1.56') {
 			exclude group: 'org.mortbay.jetty', module: 'servlet-api'
 		}
 	}
 }
 
-configure([project(':fraudDetectionService'), project(':loanApplicationService')]) {
+configure([project(':fraudDetectionServer'), project(':loanIssuance')]) {
 	apply plugin: 'spring-boot'
 	apply plugin: 'accurest'
 
@@ -78,15 +78,15 @@ configure([project(':fraudDetectionService'), project(':loanApplicationService')
 
 }
 
-configure(project(':fraudDetectionService')) {
+configure(project(':fraudDetectionServer')) {
 	test.dependsOn('generateWiremockClientStubs')
 }
 
-configure(project(':loanApplicationService')) {
+configure(project(':loanIssuance')) {
 
 	task copyCollaboratorStubs(type: Copy) {
-		File fraudBuildDir = project(':fraudDetectionService').buildDir
-		from(new File(fraudBuildDir, "/production/${project(':fraudDetectionService').name}-stubs/"))
+		File fraudBuildDir = project(':fraudDetectionServer').buildDir
+		from(new File(fraudBuildDir, "/production/${project(':fraudDetectionServer').name}-stubs/"))
 		into "src/test/resources/"
 	}
 

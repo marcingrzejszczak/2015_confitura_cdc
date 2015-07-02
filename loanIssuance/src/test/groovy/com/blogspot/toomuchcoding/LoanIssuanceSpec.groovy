@@ -1,7 +1,7 @@
 package com.blogspot.toomuchcoding
 
 import com.blogspot.toomuchcoding.frauddetection.Application
-import com.blogspot.toomuchcoding.frauddetection.LoanApplicationService
+import com.blogspot.toomuchcoding.frauddetection.LoanIssuanceService
 import com.blogspot.toomuchcoding.frauddetection.model.Client
 import com.blogspot.toomuchcoding.frauddetection.model.LoanApplication
 import com.blogspot.toomuchcoding.frauddetection.model.LoanApplicationResult
@@ -15,14 +15,14 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 @ContextConfiguration(loader = SpringApplicationContextLoader, classes = Application)
-class LoanApplicationServiceSpec extends Specification {
+class LoanIssuanceSpec extends Specification {
 
 	@ClassRule
 	@Shared
 	WireMockClassRule wireMockRule = new WireMockClassRule()
 
 	@Autowired
-	LoanApplicationService sut
+	LoanIssuanceService sut
 
 	def 'should successfully apply for loan'() {
 		given:
