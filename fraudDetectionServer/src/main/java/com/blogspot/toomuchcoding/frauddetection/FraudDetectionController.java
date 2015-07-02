@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 
-import static com.blogspot.toomuchcoding.frauddetection.model.FraudCheckStatus.FRAUD;
+import static com.blogspot.toomuchcoding.frauddetection.model.FraudCheckStatus.REJECTED;
 import static com.blogspot.toomuchcoding.frauddetection.model.FraudCheckStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -27,7 +27,7 @@ public class FraudDetectionController {
 			produces = FRAUD_SERVER_JSON_VERSION_1)
 	public FraudCheckResult fraudCheck(@RequestBody FraudCheck fraudCheck) {
 		if (amountGreaterThanThreshold(fraudCheck)) {
-			return new FraudCheckResult(FRAUD, AMOUNT_TOO_HIGH);
+			return new FraudCheckResult(REJECTED, AMOUNT_TOO_HIGH);
 		}
 		return new FraudCheckResult(OK, NO_REASON);
 	}
