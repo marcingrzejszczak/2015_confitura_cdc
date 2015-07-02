@@ -74,6 +74,12 @@ configure([project(':fraudDetectionServer'), project(':loanIssuance')]) {
 		delete 'src/test/resources/mappings', 'src/test/resources/stubs'
 	}
 
+	test {
+		testLogging {
+			exceptionFormat = 'full'
+		}
+	}
+
 	clean.dependsOn('cleanup')
 
 }
