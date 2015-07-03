@@ -90,7 +90,7 @@ configure(project(':fraudDetectionServer')) {
 
 configure(project(':loanIssuance')) {
 
-	task copyCollaboratorStubs(type: Copy) {
+	task copyCollaboratorStubs(type: Copy, dependsOn: ':fraudDetectionServer:generateWireMockClientStubs') {
 		File fraudBuildDir = project(':fraudDetectionServer').buildDir
 		from(new File(fraudBuildDir, "/production/${project(':fraudDetectionServer').name}-stubs/"))
 		into "src/test/resources/"
