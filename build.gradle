@@ -5,7 +5,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE")
-		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.7.0'
+		classpath 'io.codearte.accurest:accurest-gradle-plugin:0.9.8'
 	}
 }
 
@@ -29,7 +29,7 @@ subprojects {
 		testCompile "org.codehaus.groovy:groovy-all:2.4.3"
 		testCompile "org.spockframework:spock-core:$spockVersion"
 		testCompile("junit:junit:4.12")
-		testCompile('com.github.tomakehurst:wiremock:1.56') {
+		testCompile('com.github.tomakehurst:wiremock:2.0.4-beta') {
 			exclude group: 'org.mortbay.jetty', module: 'servlet-api'
 		}
 	}
@@ -97,4 +97,8 @@ configure(project(':loanIssuance')) {
 	}
 
 	generateAccurest.dependsOn('copyCollaboratorStubs')
+}
+
+wrapper {
+    gradleVersion '2.8'
 }
